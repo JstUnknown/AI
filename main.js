@@ -30,11 +30,24 @@ document.addEventListener("DOMContentLoaded", () => {
        const msg = comando.toLowerCase();
 
 
-       if (msg.includes("abrir youtube")) {
+    if (msg.includes("oi")) {
+           addMensagem("Assistente", "Oi");
+       
+            speak("Oi")
+
+       }
+       else if (msg.includes("abrir youtube")) {
            addMensagem("Assistente", "Abrindo YouTube...");
            window.open("https://www.youtube.com", "_blank");
        }
-      
+       else if (msg.includes("que horas são")||msg.includes("Horario")) {
+            const hora=new Date().toLocaleTimeString()
+            addMensagem("Assistente",`são  ${hora}`);
+       }
+        else if (msg.includes("abrir aula da sandy")) {
+           addMensagem("Assistente", "Abrindo...");
+           window.open("https://play.workadventu.re/@/programation/programmingcampus/conference-campus", "_blank");
+       }
        else {
            addMensagem("Assistente", "Desculpe, não entendi esse comando.");
        }
@@ -60,5 +73,28 @@ document.addEventListener("DOMContentLoaded", () => {
    });
 });
 
+const text=document.getElementById("masageInput");
+var selectVoice=null;
 
+function loadingVoice(){
+    const voices=window.speechSynthesis.getVoices();
+    selectVoice=voices.find((voice)=>
+    voice.lang==="pt-BR"&&(
+        voice.name.toLowerCase().includes("maria")||
+         voice.name.toLowerCase().includes("female")||
+          voice.name.toLowerCase().includes("mulher")
+    )
+    );
+    if(selectVoice){
+    console.log(selectVoice.name)}
+}
+window.SpeechSynthesis.onvoiceschanged=loadingVoice
 
+function speak(mensagem){
+    const fala=new SpeechSynthesisUtterance(mensagem)
+    fala.lang="pt-BR"
+    if(selectVoice){
+        fala.voice=selectVoice
+    }
+    window.speechSynthesis.speak(fala)
+}
