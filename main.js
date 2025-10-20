@@ -31,9 +31,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     if (msg.includes("oi")) {
-           addMensagem("Assistente", "Oi");
+           addMensagem("Assistente", "Oi, sou ClaudIA! Eu posso abrir sites e te dizer o horario!");
        
-            speak("Oi")
+            speak("Oi, sou sua assistente ClaudIA! Eu posso abrir sites e te dizer o horario!")
 
        }
        else if (msg.includes("abrir youtube")) {
@@ -43,10 +43,20 @@ document.addEventListener("DOMContentLoaded", () => {
        else if (msg.includes("que horas são")||msg.includes("Horario")) {
             const hora=new Date().toLocaleTimeString()
             addMensagem("Assistente",`são  ${hora}`);
+            speak(`são  ${hora}`)
        }
         else if (msg.includes("abrir aula da sandy")) {
            addMensagem("Assistente", "Abrindo...");
            window.open("https://play.workadventu.re/@/programation/programmingcampus/conference-campus", "_blank");
+       }
+       else if (msg.includes("calcular")){
+        const expressao = comando.replace("calcular","").trim()
+        try{
+            const result=eval(expressao)
+            addMensagem("Assistente", `o resultado vai ser ${result}`);
+        }catch{
+            addMensagem("Assistente", "não consegui calcular");
+        }
        }
        else {
            addMensagem("Assistente", "Desculpe, não entendi esse comando.");
@@ -85,6 +95,9 @@ function loadingVoice(){
           voice.name.toLowerCase().includes("mulher")
     )
     );
+    if(!selectVoice){
+        selectVoice=voices. find((voice)=>voice.lang==="pt-BR")
+    }
     if(selectVoice){
     console.log(selectVoice.name)}
 }
