@@ -86,22 +86,48 @@ document.addEventListener("DOMContentLoaded", () => {
 const text=document.getElementById("masageInput");
 var selectVoice=null;
 
-function loadingVoice(){
-    const voices=window.speechSynthesis.getVoices();
-    selectVoice=voices.find((voice)=>
-    voice.lang==="pt-BR"&&(
-        voice.name.toLowerCase().includes("maria")||
-         voice.name.toLowerCase().includes("female")||
-          voice.name.toLowerCase().includes("mulher")
-    )
-    );
-    if(!selectVoice){
-        selectVoice=voices. find((voice)=>voice.lang==="pt-BR")
-    }
-    if(selectVoice){
-    console.log(selectVoice.name)}
+function loadingVoice() {
+   const voices = window.speechSynthesis.getVoices();
+
+
+   //vozes femininas conhecidas
+   const preferidas = [
+       "Google português do Brasil",
+       "Microsoft Maria",
+       "Microsoft Francisca",
+       "Maria",
+       "Camila",
+       "Luciana",
+       "female",
+       "mulher"
+   ];
+
+
+   // tenta encontrar uma voz feminina em pt-BR
+   selectVoice = voices.find(voice =>
+       voice.lang === "pt-BR" &&
+       preferidas.some(nome => voice.name.toLowerCase().includes(nome.toLowerCase()))
+   );
+
+
+   // fallback
+   if (!selectVoice) {
+       selectVoice = voices.find(voice => voice.lang === "pt-BR");
+   }
+
+
+   if (selectVoice) {
+       console.log("Voz selecionada:", selectVoice.name);
+   } else {
+       console.warn("Nenhuma voz pt-BR encontrada, usando padrão do sistema.");
+   }
 }
-window.SpeechSynthesis.onvoiceschanged=loadingVoice
+
+
+
+
+window.speechSynthesis.onvoiceschanged = loadingVoice;
+window.addEventListener("load", () => setTimeout(loadingVoice, 500));
 
 function speak(mensagem){
     const fala=new SpeechSynthesisUtterance(mensagem)
