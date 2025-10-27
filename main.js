@@ -57,6 +57,28 @@ document.addEventListener("DOMContentLoaded", () => {
         }catch{
             addMensagem("Assistente", "não consegui calcular");
         }
+       }else if(msg.includes("pesquisar")){
+        const termo=comando.replace("pesquisar","").trim();
+        if(termo){
+            addMensagem("Assistente",`pesquisando por "${termo}"...`);
+            //window.open(`https://www.google.com/search?q=${encodeURIComponent(termo)}`, "_blank")
+            fetch(`https://api.duckduckgo.com/?q=${encodeURIComponent(termo)}&format=json&no_html=1`)
+            .then(res=>res.json())
+            .then (data=>{
+                if(data.AbstractText){
+                    addMensagem("Assistente", data.AbstractText)
+                }else if(data.RelatedTopics && data.RelatedTopics.length>0){
+                    addMensagem("Assistente", data.RelatedTopics[0].Text)
+                }else{
+                    addMensagem("Assistente","Não encontrei uma resposta, mas posso abrir uma pesquisa")
+                    window.open(`https://www.google.com/search?q=${encodeURIComponent(termo)}`, "_blank")
+                }
+            }).catch(()=>{
+                addMensagem("Assistente", "Ocorreu um erro na busca")
+            })
+        }else{
+            addMensagem("Assistente","o que deseja saber?")
+        }
        }
        else {
            addMensagem("Assistente", "Desculpe, não entendi esse comando.");
